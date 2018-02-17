@@ -11,8 +11,12 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN ln -s /php/composer.phar /usr/bin/composer
 
-WORKDIR /code
+# Not root user
+RUN useradd -c 'PHP user' -m -d /home/php -s /bin/bash php
+USER php
+ENV HOME /home/php
 
+WORKDIR /code
 VOLUME /code
 
 CMD '/bin/bash'
