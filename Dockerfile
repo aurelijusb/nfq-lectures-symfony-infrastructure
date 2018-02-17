@@ -24,4 +24,6 @@ ENV HOME /home/php
 WORKDIR /code
 VOLUME /code
 
+# For testing php framework
+EXPOSE 8000
 CMD '/bin/bash'
