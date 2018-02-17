@@ -11,6 +11,11 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN ln -s /php/composer.phar /usr/bin/composer
 
+# Install dependencies
+RUN apt-get update \
+ && apt-get install -y git zip unzip \
+ && rm -rf /var/lib/apt/lists/*
+
 # Not root user
 RUN useradd -c 'PHP user' -m -d /home/php -s /bin/bash php
 USER php
