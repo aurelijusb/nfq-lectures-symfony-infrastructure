@@ -19,7 +19,7 @@ RUN apt-get update \
 # Install PHP extensions
 RUN apt-get update \
  && apt-get install -y libzip-dev \
- && docker-php-ext-install -j$(nproc) zip \
+ && docker-php-ext-install -j$(nproc) zip mysqli pdo_mysql \
  && rm -rf /var/lib/apt/lists/*
 
 # Not root user
