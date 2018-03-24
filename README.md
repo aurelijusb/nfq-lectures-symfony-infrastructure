@@ -29,6 +29,13 @@ Test on host (your normal) machine:
 
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
+Versioning
+----------
+
+```bash
+echo ".idea/" > ~/.gitignore
+git config --global core.excludesfile ~/.gitignore
+```
 
 Bonus
 -----
