@@ -18,7 +18,7 @@ RUN apt-get update \
 
 # Install PHP extensions
 RUN apt-get update \
- && apt-get install -y libzip-dev \
+ && apt-get install -y libzip-dev bash-completion \
  && docker-php-ext-install -j$(nproc) zip mysqli pdo_mysql \
  && rm -rf /var/lib/apt/lists/*
 

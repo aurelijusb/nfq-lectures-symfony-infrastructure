@@ -29,6 +29,18 @@ Test on host (your normal) machine:
 
 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
+
+Bonus
+-----
+
+[Auto complete](https://github.com/bamarni/symfony-console-autocomplete)
+```
+composer global require bamarni/symfony-console-autocomplete
+export PATH="$PATH:~/.composer/vendor/bin/"
+eval "$(symfony-autocomplete ./bin/console --shell=bash)"
+eval "$(symfony-autocomplete composer --shell=bash)"
+```
+
 References
 ----------
 
