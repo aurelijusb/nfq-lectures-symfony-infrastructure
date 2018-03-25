@@ -37,6 +37,17 @@ echo ".idea/" > ~/.gitignore
 git config --global core.excludesfile ~/.gitignore
 ```
 
+Mysql
+-----
+```
+docker run --name mysql.symfony -e MYSQL_ROOT_PASSWORD=p9iijKcfgENjBWDYgSH7 -v$PWD/mysql-data/:/var/lib/mysql -p172.17.0.1:3306:3306 -d mysql:5.7.21
+```
+
+To test:
+```
+echo "CREATE DATABASE IF NOT EXISTS symfony; CREATE DATABASE IF NOT EXISTS symfony_test; SHOW DATABASES" | mysql -uroot -p -h172.17.0.1 --port=3306
+```
+
 Bonus
 -----
 
