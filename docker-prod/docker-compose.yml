@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  nginx.symfony:
+    container_name: nginx.symfony
+    image: nginx:1.13.10
+    volumes:
+      - ../akademija2018/:/code
+      - ./nginx/site.conf:/etc/nginx/conf.d/site.conf
+    ports:
+      - 127.0.0.1:80:80
+
+  php.symfony:
+    container_name: php.symfony
+    image: php-prod
+    volumes:
+      - ../akademija2018/:/code
+
+  mysql.symfony:
+    container_name: mysql.symfony
+    image: mysql:5.7.21
+    environment:
+      - MYSQL_ROOT_PASSWORD=p9iijKcfgENjBWDYgSH7
+    volumes:
+      - ../mysql-data/:/var/lib/mysql
+

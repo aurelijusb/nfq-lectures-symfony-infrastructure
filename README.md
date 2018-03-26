@@ -3,6 +3,7 @@ Symfony examples
 
 Creating development environment:
 ```
+cd docker-dev/
 docker build . -t php
 docker run -v $PWD:/code -p127.0.0.1:8000:8000 -it php
 ```
@@ -35,6 +36,16 @@ Versioning
 ```bash
 echo ".idea/" > ~/.gitignore
 git config --global core.excludesfile ~/.gitignore
+```
+
+Prod
+----
+
+```
+sudo su -c 'echo "127.0.0.1 symfony.prod" >> /etc/hosts'
+cd docker-prod/
+Docker build . -t php-prod
+docker-compose up
 ```
 
 Mysql
