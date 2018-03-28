@@ -1,4 +1,4 @@
-FROM php:7.2.2
+FROM php:7.2.2-fpm
 
 MAINTAINER Aurelijus Banelis <aurelijus@banelis.lt>
 
@@ -29,7 +29,3 @@ ENV HOME /home/php
 
 WORKDIR /code
 VOLUME /code
-
-# For testing php framework
-EXPOSE 8000
-CMD '/bin/bash'

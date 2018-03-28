@@ -12,7 +12,11 @@ services:
 
   php.symfony:
     container_name: php.symfony
-    image: php-prod
+    image: php
+    environment:
+      - APP_ENV=prod
+      - APP_SECRET=31ab70e5aea4699ba61deddc8438d2f1
+      - DATABASE_URL=mysql://root:p9iijKcfgENjBWDYgSH7@mysql.symfony:3306/symfony
     volumes:
       - ../akademija2018/:/code
 
