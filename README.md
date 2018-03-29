@@ -60,10 +60,17 @@ Reusing examples (dev environment)
 sudo su -c 'echo "127.0.0.1 symfony.local" >> /etc/hosts'
 git clone git@github.com:aurelijusb/nfq-lectures-symfony-code.git akademija2018
 docker build php/ -t php 
+docker build frontend/ -t node 
 docker-compose up
 ```
 
-Open [symfony.local](http://symfony.local) 
+Open [symfony.local](http://symfony.local)
+
+For frontend use:
+```
+docker-compose run frontend.symfony
+yarn run encore dev --watch
+``` 
 
 Reusing examples (prod environment)
 ----------------------------------

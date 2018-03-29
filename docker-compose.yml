@@ -28,3 +28,10 @@ services:
     volumes:
       - ./mysql-data/:/var/lib/mysql
 
+  frontend.symfony:
+    container_name: frontend.symfony
+    image: node
+    volumes:
+      - ./akademija2018/:/code
+
+
