@@ -77,6 +77,23 @@ docker-compose up
 
 Open [symfony.prod](http://symfony.prod) 
 
+Accessing Symfony console
+-------------------------
+
+```
+docker exec it php.symfony bash
+./bin/console
+```
+
+Same goes with composer:
+
+```
+docker exec it php.symfony bash
+composer info
+```
+
+Using docker and running commands inside docker container is useful to mitigate _works on my machine_ problems.
+
 Bonus
 -----
 
