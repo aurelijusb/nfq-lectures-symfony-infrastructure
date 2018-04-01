@@ -110,7 +110,7 @@ composer global require bamarni/symfony-console-autocomplete
 ```
 ```
 export PATH="$PATH:~/.composer/vendor/bin/"
-eval "$(symfony-autocomplete ./bin/console --shell=bash)"
+eval "$(APP_ENV=dev symfony-autocomplete ./bin/console --shell=bash)"
 eval "$(symfony-autocomplete composer --shell=bash)"
 ```
 
