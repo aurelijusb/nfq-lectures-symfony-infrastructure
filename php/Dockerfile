@@ -18,9 +18,18 @@ RUN apt-get update \
 
 # Install PHP extensions
 RUN apt-get update \
- && apt-get install -y libzip-dev bash-completion \
+ && apt-get install -y libzip-dev bash-completion procps nano \
  && docker-php-ext-install -j$(nproc) zip mysqli pdo_mysql \
  && rm -rf /var/lib/apt/lists/*
+
+# xDebug helpers (do not use this in real production)
+ADD enable_xdebug.sh /enable_xdebug.sh
+ADD disable_xdebug.sh /disable_xdebug.sh
+RUN pecl install xdebug-2.6.0 && \
+    chmod +x /enable_xdebug.sh && \
+    chmod +x /disable_xdebug.sh && \
+    touch /usr/local/etc/php/conf.d/custom-xdebug.ini && \
+    chmod 777 /usr/local/etc/php/conf.d/custom-xdebug.ini
 
 # Not root user
 RUN useradd -c 'PHP user' -m -d /home/php -s /bin/bash php
