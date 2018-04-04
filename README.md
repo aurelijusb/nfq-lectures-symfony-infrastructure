@@ -8,7 +8,7 @@ Creating from zero
 
 * [Install docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 * [Install docker-compose](https://docs.docker.com/compose/install/)
-* Ensure nothing is running on `80` port (e.g. local `apache`, `nginx`,`skype`)
+* Ensure nothing is running on `80` and `3306` port (e.g. local `apache`, `nginx`,`skype`, `mysql`)
 * Prepare infrastructure:
   ```
   sudo su -c 'echo "127.0.0.1 symfony.local" >> /etc/hosts'
@@ -49,11 +49,11 @@ docker exec -it php.symfony bash
 * Results should be visible via Browser at [symfony.local](http://symfony.local)
 
 
-### Starting project for production
+### Starting project for production-like environment
 
 * [Install docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 * [Install docker-compose](https://docs.docker.com/compose/install/)
-* Ensure nothing is running on `80` port (e.g. local `apache`, `nginx`,`skype`)
+* Ensure nothing is running on `80` and `3306` port (e.g. local `apache`, `nginx`,`skype`, `mysql`)
 * Prepare infrastructure:
   ```
   sudo su -c 'echo "127.0.0.1 symfony.prod" >> /etc/hosts'
@@ -124,12 +124,21 @@ docker rm -f $(docker ps -aq)
 docker-compose up -d
 ```
 
+
 * **I messed up database. How to refresh database?**
 
 Remove running containers (or at least MySql): `docker rm -f $(docker ps -aq)`
 Remove `mysql-data` folder.
 Start containers again (empty MySql will be created): `docker-compose up -d`
 
+
+* **How to connect to MySql instance?**
+
+```
+mysql -uroot -h127.0.0.1 --port=3306 -p
+```
+
+Use password: `p9iijKcfgENjBWDYgSH7` (same as in [docker-compose.yml] `MYSQL_ROOT_PASSWORD=`)
 
 Versioning
 ----------
