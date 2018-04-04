@@ -99,13 +99,12 @@ P.S. you can also open alongside `symfony.local` – which is development versio
 FAQ
 ---
 
-* **I have `apache` installed and do not want to stop/uninstall it**
+##### I have `apache` installed and do not want to stop/uninstall it
 
 You can change `127.0.0.1:80:80` in [docker-compose.yml] to something like `127.0.0.1:8080:80`.
 So your urls will be [http://symfony.local:8080]
 
-
-* **What is MySQL user and passord and how to change it?**
+##### What is MySQL user and passord and how to change it?
 
 There is `MYSQL_ROOT_PASSWORD=` in [docker-compose.yml] for `root` user.
 Database with this password is created when you first launch your instance.
@@ -115,8 +114,7 @@ It is use in:
  * Nginx configuration near `DATABASE_URL` in [nginx/site.conf]
  * Symfony project development environment near `DATABASE_URL` in `.env` file
 
-
-* **I messed up something. How to refresh everything?**
+##### messed up something. How to refresh everything?
 
 Remove all running containers and start them again:
 ```
@@ -124,21 +122,20 @@ docker rm -f $(docker ps -aq)
 docker-compose up -d
 ```
 
-
-* **I messed up database. How to refresh database?**
+##### I messed up database. How to refresh database?
 
 Remove running containers (or at least MySql): `docker rm -f $(docker ps -aq)`
 Remove `mysql-data` folder.
 Start containers again (empty MySql will be created): `docker-compose up -d`
 
-
-* **How to connect to MySql instance?**
+##### How to connect to MySql instance?
 
 ```
 mysql -uroot -h127.0.0.1 --port=3306 -p
 ```
 
 Use password: `p9iijKcfgENjBWDYgSH7` (same as in [docker-compose.yml] `MYSQL_ROOT_PASSWORD=`)
+
 
 Versioning
 ----------
