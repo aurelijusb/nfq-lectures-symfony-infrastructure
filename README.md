@@ -4,102 +4,142 @@ Symfony examples
 Creating from zero
 ------------------
 
-### Creating development environment
+### Starting project for development
+
+* [Install docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+* [Install docker-compose](https://docs.docker.com/compose/install/)
+* Ensure nothing is running on `80` port (e.g. local `apache`, `nginx`,`skype`)
+* Prepare infrastructure:
+  ```
+  sudo su -c 'echo "127.0.0.1 symfony.local" >> /etc/hosts'
+  docker build php/ -t php.symfony 
+  docker build frontend/ -t frontend.symfony
+  docker-compose up -d
+  ```
+  (If you are not changing infrastructure, next time you would only need to run `docker-compose up -d`)
+
+* Start container with frontend tools (exec into container):
 ```
-docker build . -t php
-docker run -v $PWD:/code -p127.0.0.1:8000:8000 -it php
+docker-compose run frontend.symfony
+```
+  * For first time – install JavaScript dependencies and libraries:
+  ```
+  npm install
+  ```
+  * During development (regenerate files):
+  ```
+  yarn run encore dev --watch
+  ```
+
+* Use container with PHP tools (exec into running container):
+```
+docker exec -it php.symfony bash
+```
+  * For the first time – install PHP dependencies and libraries:
+  ```
+  composer install
+  ```
+  * During development (regenerate files)
+  ```
+  ./bin/console --env=dev cache:clear
+  ./bin/console --env=dev cache:warmup
+  ./bin/console --env=dev assets:install
+  ```
+
+* Results should be visible via Browser at [symfony.local](http://symfony.local)
+
+
+### Starting project for production
+
+* [Install docker CE](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+* [Install docker-compose](https://docs.docker.com/compose/install/)
+* Ensure nothing is running on `80` port (e.g. local `apache`, `nginx`,`skype`)
+* Prepare infrastructure:
+  ```
+  sudo su -c 'echo "127.0.0.1 symfony.prod" >> /etc/hosts'
+  docker build php/ -t php.symfony
+  docker build frontend/ -t frontend.symfony
+  docker-compose up -d
+  ```
+  (If you are not changing infrastructure, next time you would only need to run `docker-compose up -d`)
+
+* Start container with frontend tools (exec into container):
+```
+docker-compose run frontend.symfony
+```
+  * For the first time – install JavaScript dependencies and libraries:
+  ```
+  npm install
+  ```
+  * Generate optimized versions (or if changes are not visible):
+  ```
+  yarn run encore production
+  ```
+
+* Use container with PHP tools (exec into running container):
+```
+docker exec -it php.symfony bash
+```
+  * For the first time – install PHP dependencies and libraries:
+  ```
+  composer install
+  ```
+  * Generate optimized versions (or if changes are not visible):
+  ```
+  ./bin/console --env=prod cache:clear
+  ./bin/console --env=prod cache:warmup
+  ./bin/console --env=prod assets:install
+  ```
+
+* Results should be visible via Browser at [symfony.prod](http://symfony.prod)
+
+P.S. you can also open alongside `symfony.local` – which is development version the same code.
+
+
+FAQ
+---
+
+* **I have `apache` installed and do not want to stop/uninstall it**
+
+You can change `127.0.0.1:80:80` in [docker-compose.yml] to something like `127.0.0.1:8080:80`.
+So your urls will be [http://symfony.local:8080]
+
+
+* **What is MySQL user and passord and how to change it?**
+
+There is `MYSQL_ROOT_PASSWORD=` in [docker-compose.yml] for `root` user.
+Database with this password is created when you first launch your instance.
+It is use in:
+
+ * `PHP` container near `DATABASE_URL=` in [docker-compose.yml]
+ * Nginx configuration near `DATABASE_URL` in [nginx/site.conf]
+ * Symfony project development environment near `DATABASE_URL` in `.env` file
+
+
+* **I messed up something. How to refresh everything?**
+
+Remove all running containers and start them again:
+```
+docker rm -f $(docker ps -aq)
+docker-compose up -d
 ```
 
-```
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
-```
+* **I messed up database. How to refresh database?**
 
-### Installing Symfony
-```
-composer create-project symfony/skeleton akademija2018
-```
+Remove running containers (or at least MySql): `docker rm -f $(docker ps -aq)`
+Remove `mysql-data` folder.
+Start containers again (empty MySql will be created): `docker-compose up -d`
 
-### Testing Symfony
- 
-(use `127.0.0.1` instead of `0.0.0.0` if outside of docker)
-```
-cd akademija2018
-php -S 0.0.0.0:8000 -t public
-```
-
-Test on host (your normal) machine:
-
-[http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-
-### Adding MySql instance
-
-```
-docker run --name mysql.symfony -e MYSQL_ROOT_PASSWORD=p9iijKcfgENjBWDYgSH7 -v$PWD/mysql-data/:/var/lib/mysql -p172.17.0.1:3306:3306 -d mysql:5.7.21
-```
-
-To test:
-```
-echo "CREATE DATABASE IF NOT EXISTS symfony; CREATE DATABASE IF NOT EXISTS symfony_test; SHOW DATABASES" | mysql -uroot -p -h172.17.0.1 --port=3306
-```
 
 Versioning
 ----------
+
+It is good practice to ignore IDE config files from going into Version control.
 
 ```bash
 echo ".idea/" > ~/.gitignore
 git config --global core.excludesfile ~/.gitignore
 ```
-
-Reusing examples (dev environment)
-----------------------------------
-
-```
-sudo su -c 'echo "127.0.0.1 symfony.local" >> /etc/hosts'
-git clone git@github.com:aurelijusb/nfq-lectures-symfony-code.git akademija2018
-docker build php/ -t php 
-docker build frontend/ -t node 
-docker-compose up
-```
-
-Open [symfony.local](http://symfony.local)
-
-For frontend use:
-```
-docker-compose run frontend.symfony
-yarn run encore dev --watch
-``` 
-
-Reusing examples (prod environment)
-----------------------------------
-
-```
-sudo su -c 'echo "127.0.0.1 symfony.prod" >> /etc/hosts'
-git clone git@github.com:aurelijusb/nfq-lectures-symfony-code.git akademija2018
-docker build php/ -t php
-docker-compose up
-```
-
-Open [symfony.prod](http://symfony.prod) 
-
-Accessing Symfony console
--------------------------
-
-```
-docker exec it php.symfony bash
-./bin/console
-```
-
-Same goes with composer:
-
-```
-docker exec it php.symfony bash
-composer info
-```
-
-Using docker and running commands inside docker container is useful to mitigate _works on my machine_ problems.
 
 Bonus
 -----
@@ -119,6 +159,8 @@ References
 
 * https://symfony.com/
 * https://docs.docker.com/engine/reference/builder/
+* https://docs.docker.com/engine/reference/builder
+* https://docs.docker.com/compose/compose-file/compose-file-v2/
 
 Author
 ======
